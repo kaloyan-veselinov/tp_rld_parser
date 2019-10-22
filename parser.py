@@ -12,6 +12,12 @@ class Gateway:
         self.latitude = latitude
         self.longitude = longitude
 
+    def __repr__(self):
+        return self.__str__()
+
+    def __str__(self):
+        return f'id: {self.id} rssi: {self.rssi} snr: {self.snr} latitude: {self.latitude} longitude: {self.longitude}'
+
 
 class Mesure:
     def __init__(self, data_rate: str, coding_rate: str, latitude: float, longitude: float,
@@ -23,6 +29,9 @@ class Mesure:
         self.temperature = temperature
         self.humidity = humidity
         self.gateways = gateways
+
+    def __str__(self):
+        return f'data_rate: {self.data_rate} latitude: {self.latitude} longitude: {self.longitude} temperature: {self.temperature} humidity: {self.humidity} gateways: {self.gateways}'
 
 
 def parse_gateway_from_json(gateway_data: JSONObject) -> Gateway:
