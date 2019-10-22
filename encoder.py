@@ -1,3 +1,5 @@
+from typing import List
+
 from geojson import Point, Feature, FeatureCollection
 
 
@@ -12,11 +14,15 @@ class DataPoint:
     def get_pin_color(self) -> str:
         return "#FFF"
 
-    def get_geojson_feature(self):
+    def get_geojson_feature(self) -> Feature:
         return Feature(
             geometry=self.get_geojson_point(),
             properties={'marker-color': self.get_pin_color()}
         )
+
+    @staticmethod
+    def get_geojson_feature_collection(data_points: List['DataPoint']) -> FeatureCollection:
+        return FeatureCollection([d.get_geojson_feature() for d in data_points])
 
 
 class RSSIDataPoint(DataPoint):
@@ -31,6 +37,6 @@ class RSSIDataPoint(DataPoint):
 if __name__ == "__main__":
     d1 = RSSIDataPoint(latitude=45.7837, longitude=4.8724, rssi=-107)
     d2 = RSSIDataPoint(latitude=45.7859, longitude=4.8783, rssi=-113)
-    feature_collection: FeatureCollection = FeatureCollection([d1.get_geojson_feature(), d2.get_geojson_feature()])
+    feature_collection: FeatureCollection = DataPoint.get_geojson_feature_collection([d1, d2])
     print(feature_collection)
 
