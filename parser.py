@@ -44,7 +44,7 @@ def parse_gateway_from_json(gateway_data: JSONObject) -> Gateway:
     )
 
 
-def parse_mesure_from_json(mesure_data: JSONObject) -> Mesure :
+def parse_mesure_from_json(mesure_data: JSONObject) -> Mesure:
     return Mesure(
         data_rate=mesure_data['metadata']['data_rate'],
         coding_rate=mesure_data['metadata']['coding_rate'],
