@@ -3,6 +3,12 @@ import sys
 from json.decoder import JSONObject
 from typing import List
 
+from geopy import distance
+
+from encoder import RSSIDataPoint
+
+from processor import get_reduced_dataset
+
 
 class Gateway:
     def __init__(self, id: str, rssi: int, snr: float, latitude: float, longitude: float):
@@ -41,6 +47,12 @@ class Mesure:
 
     def __ne__(self, other):
         return not self.__eq__(other)
+
+    def distance(self, other: 'Mesure') -> float:
+        return distance.distance(
+            (self.longitude, self.latitude),
+            (other.longitude, other.latitude)
+        ).m
 
 
 def parse_gateway_from_json(gateway_data: JSONObject) -> Gateway:
@@ -84,6 +96,15 @@ if __name__ == "__main__":
         content: List[str] = [l.strip() for l in file.readlines()]
         for line in content:
             j = parse_line_to_json(line)
-            m: Mesure = parse_mesure_from_json(j)
-            mesures.append(m)
-            print(m)
+            mesures.append(parse_mesure_from_json(j))
+
+    rssi_data_points: List[RSSIDataPoint] = []
+    for m in mesures:
+        rssi_data_points.append(RSSIDataPoint(
+            latitude=m.latitude,
+            longitude=m.longitude,
+            rssi=m.gateways[0].rssi
+        ))
+
+    # print(RSSIDataPoint.get_geojson_feature_collection(rssi_data_points))
+    print(get_reduced_dataset(mesures))
