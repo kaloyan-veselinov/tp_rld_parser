@@ -28,8 +28,8 @@ class Mesure:
 def parse_gateway_from_json(gateway_data: JSONObject) -> Gateway:
     return Gateway(
         id=gateway_data['gtw_id'],
-        latitude=gateway_data['latitude'],
-        longitude=gateway_data['longitude'],
+        latitude=gateway_data['latitude'] if 'latitude' in gateway_data else None,
+        longitude=gateway_data['longitude'] if 'longitude' in gateway_data else None,
         rssi=gateway_data['rssi'],
         snr=gateway_data['snr']
     )
@@ -62,4 +62,6 @@ if __name__ == "__main__":
     with open(path) as file:
         content: List[str] = [l.strip() for l in file.readlines()]
         for line in content:
-            print(parse_line_to_json(line))
+            j = parse_line_to_json(line)
+            m: Mesure = parse_mesure_from_json(j)
+            print(m)
