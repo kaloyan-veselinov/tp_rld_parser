@@ -26,7 +26,7 @@ class Mesure:
 
 
 def get_data_from_line(line: str)->str:
-    arr = line.split(" ")
+    arr: List[str] = line.split(" ")
     return arr[1]
 
 
@@ -36,8 +36,8 @@ def parse_line_to_json(line: str)->JSONObject:
 
 
 if __name__ == "__main__":
-    path = sys.argv[1]
+    path: str = sys.argv[1]
     with open(path) as file:
-        content = [l.strip() for l in file.readlines()]
+        content: List[str] = [l.strip() for l in file.readlines()]
         for line in content:
             print(parse_line_to_json(line))
