@@ -3,11 +3,9 @@ import sys
 from json.decoder import JSONObject
 from typing import List
 
-from geopy import distance
-
 from encoder import RSSIDataPoint
 
-from processor import get_clusters
+from processor import get_clusters, AveragedMesure
 
 
 class Gateway:
@@ -71,7 +69,7 @@ def parse_mesure_from_json(mesure_data: JSONObject) -> Mesure:
         coding_rate=mesure_data['metadata']['coding_rate'],
         latitude=mesure_data['payload_fields']['latitude'],
         longitude=mesure_data['payload_fields']['longitude'],
-        temperature=mesure_data['payload_fields']['latitude'],
+        temperature=mesure_data['payload_fields']['temperature'],
         humidity=mesure_data['payload_fields']['humidity'],
         gateways=[parse_gateway_from_json(g) for g in mesure_data['metadata']['gateways']]
     )
@@ -105,9 +103,10 @@ if __name__ == "__main__":
         ))
 
     # print(RSSIDataPoint.get_geojson_feature_collection(rssi_data_points))
-    db = get_clusters(
+    clusters = get_clusters(
         mesures=mesures,
         nombre_min_mesures=30,
         rayon_mesure_en_metres=15
     )
-    print(db)
+    average_0 = AveragedMesure(mesures=clusters[0])
+    print(average_0)
