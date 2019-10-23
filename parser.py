@@ -5,10 +5,10 @@ from typing import List
 
 from encoder import RSSIDataPoint
 
-from processor import get_clusters, AveragedMesure, filter_mesures_by_sf
+from processor import get_clusters, filter_mesures_by_sf, filter_mesures_by_gateway, get_gateways
 
 
-class Gateway:
+class MesureGateway:
     def __init__(self, id: str, rssi: int, snr: float, latitude: float, longitude: float):
         self.id = id
         self.rssi = rssi
@@ -26,7 +26,7 @@ class Gateway:
 class Mesure:
     def __init__(self, device_id: str, counter: int, data_rate: str, coding_rate: str, latitude: float,
                  longitude: float,
-                 temperature: int, humidity: int, gateways: List[Gateway]):
+                 temperature: int, humidity: int, gateways: List[MesureGateway]):
         self.device_id = device_id
         self.counter = counter
         self.data_rate = data_rate
@@ -51,8 +51,8 @@ class Mesure:
 
 
 
-def parse_gateway_from_json(gateway_data: JSONObject) -> Gateway:
-    return Gateway(
+def parse_gateway_from_json(gateway_data: JSONObject) -> MesureGateway:
+    return MesureGateway(
         id=gateway_data['gtw_id'],
         latitude=gateway_data['latitude'] if 'latitude' in gateway_data else None,
         longitude=gateway_data['longitude'] if 'longitude' in gateway_data else None,
@@ -108,6 +108,3 @@ if __name__ == "__main__":
         nombre_min_mesures=30,
         rayon_mesure_en_metres=15
     )
-
-    sf_clusters = filter_mesures_by_sf(mesures)
-    print(sf_clusters)

@@ -1,8 +1,22 @@
+from copy import copy
 from statistics import mean, median
 from typing import List, Dict
 
 from numpy.core._multiarray_umath import radians
 from sklearn.cluster import DBSCAN
+
+
+class Gateway:
+    def __init__(self, id: str, latitude: float, longitude: float):
+        self.id = id
+        self.latitude = latitude
+        self.longitude = longitude
+
+    def __str__(self):
+        return f'id: {self.id} lat: {self.latitude} long: {self.longitude}'
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class AveragedMesure:
@@ -26,6 +40,35 @@ def filter_mesures_by_sf(mesures: List['Mesure'])->Dict[str, List['Mesure']]:
         else:
             mesures_by_sf[m.data_rate] = [m]
     return mesures_by_sf
+
+
+def get_gateways(mesures: List['Mesure'])->Dict[str, Gateway]:
+    gateways: Dict[str, Gateway] = {}
+    for mesure in mesures:
+        for mesure_gw in mesure.gateways:
+            if mesure_gw.id not in gateways:
+                if mesure_gw.latitude and mesure_gw.longitude:
+                    gateways[mesure_gw.id] = Gateway(
+                        id=mesure_gw.id,
+                        latitude=mesure_gw.latitude,
+                        longitude=mesure_gw.longitude
+                    )
+    return gateways
+
+
+def filter_mesures_by_gateway(mesures: List['Mesure'])->Dict[str, List['Mesure']]:
+    mesures_by_gateway: Dict[str, List['Mesure']] = {}
+    for mesure in mesures:
+        for mesure_gw in mesure.gateways:
+            mesure_copy = copy(mesure)
+            mesure_copy.gateways = [gwm for gwm in mesure.gateways if gwm.id == mesure_gw.id]
+
+            if mesure_gw.id in mesures_by_gateway:
+                mesures_by_gateway[mesure_gw.id].append(mesure_copy)
+            else:
+                mesures_by_gateway[mesure_gw.id] = [mesure_copy]
+
+    return mesures_by_gateway
 
 
 def get_coordinates_matrix(mesures: List['Mesure']) -> List[List[float]]:
