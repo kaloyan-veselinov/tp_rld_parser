@@ -7,7 +7,7 @@ from geopy import distance
 
 from encoder import RSSIDataPoint
 
-from processor import get_reduced_dataset
+from processor import get_clusters
 
 
 class Gateway:
@@ -105,7 +105,7 @@ if __name__ == "__main__":
         ))
 
     # print(RSSIDataPoint.get_geojson_feature_collection(rssi_data_points))
-    db = get_reduced_dataset(
+    db = get_clusters(
         mesures=mesures,
         nombre_min_mesures=30,
         rayon_mesure_en_metres=15

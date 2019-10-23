@@ -40,8 +40,7 @@ def group_data(mesures: List['Mesure'], cluster_assignements: List[int])-> Dict[
     return data
 
 
-
-def get_reduced_dataset(rayon_mesure_en_metres: float, nombre_min_mesures: int, mesures: List['Mesure']):
+def get_clusters(rayon_mesure_en_metres: float, nombre_min_mesures: int, mesures: List['Mesure']):
     coordinates: List[List[float]] = get_coordinates_matrix(mesures)
     cluster_ids: List[int] = get_cluster_assignments(
         rayon_mesure_en_metres=rayon_mesure_en_metres,
