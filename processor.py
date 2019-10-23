@@ -1,6 +1,8 @@
 from statistics import mean, median
 from typing import List, Dict
 
+from preprocessor import filter_mesures_by_gateway
+
 
 class Gateway:
     def __init__(self, gw_id: str, latitude: float, longitude: float):
@@ -17,8 +19,8 @@ class Gateway:
 
 class AveragedMesure:
     def __init__(self, mesures: List['Mesure']):
-        self.latitude = mean(m.latitude for m in mesures)
-        self.longitude = mean(m.longitude for m in mesures)
+        self.latitude = median(m.latitude for m in mesures)
+        self.longitude = median(m.longitude for m in mesures)
         self.temperature = median(m.temperature for m in mesures)
         self.humidity = median(m.humidity for m in mesures)
         self.max_gateway_rssi = mean(m.gateways[0].rssi for m in mesures)
@@ -40,3 +42,17 @@ def get_gateways(mesures: List['Mesure']) -> Dict[str, Gateway]:
                         longitude=mesure_gw.longitude
                     )
     return gateways
+
+
+def get_gateways_coverage(mesures: List['Mesure']) -> Dict[str, List[AveragedMesure]]:
+    gateways_coverage: Dict[str, List[AveragedMesure]] = {}
+    mesures_by_gw: Dict[str, List['Mesure']] = filter_mesures_by_gateway(mesures)
+
+    for gw_id, m in mesures_by_gw.items():
+        average_mesure = AveragedMesure(mesures=m)
+        if gw_id in gateways_coverage:
+            gateways_coverage[gw_id].append(average_mesure)
+        else:
+            gateways_coverage[gw_id] = [average_mesure]
+
+    return gateways_coverage

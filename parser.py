@@ -3,10 +3,10 @@ import sys
 from json.decoder import JSONObject
 from typing import List
 
-from encoder import RSSIDataPoint, create_gateways_map
+from encoder import RSSIDataPoint, create_gateways_map, create_gateways_rssi_coverage_maps
 
 from preprocessor import get_clusters
-from processor import get_gateways
+from processor import get_gateways, get_gateways_coverage
 
 
 class MesureGateway:
@@ -110,5 +110,16 @@ if __name__ == "__main__":
         rayon_mesure_en_metres=15
     )
 
-    gateways_map = create_gateways_map(get_gateways(mesures))
+    gateways = get_gateways(mesures)
+    gateways_map = create_gateways_map(gateways)
+    print("################## Gateways ##################")
     print(gateways_map)
+    print()
+
+    gateways_coverage = get_gateways_coverage(mesures)
+    gateways_coverage_maps = create_gateways_rssi_coverage_maps(gateways, gateways_coverage)
+    print("################## Gateways coverage ##################")
+    for gw, map in gateways_coverage_maps.items():
+        print(f'id: {gw}')
+        print(map)
+        print()

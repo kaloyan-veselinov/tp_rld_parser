@@ -2,7 +2,7 @@ from typing import List, Dict
 
 from geojson import Point, Feature, FeatureCollection
 
-from processor import Gateway
+from processor import Gateway, AveragedMesure
 
 
 class DataPoint:
@@ -42,7 +42,7 @@ class GatewayDataPoint(DataPoint):
         self.id = id
 
     def get_pin_color(self) -> str:
-        return "#FF0000"
+        return "#FFF"
 
     def get_geojson_feature(self) -> Feature:
         return Feature(
@@ -61,6 +61,25 @@ def create_gateways_map(gateways: Dict[str, Gateway]):
         id=g.gw_id
     ) for g in gateways.values()]
     return DataPoint.get_geojson_feature_collection(gateway_data_points)
+
+
+def create_gateways_rssi_coverage_maps(gateways: Dict[str, Gateway], gateways_coverage: Dict[str, List[AveragedMesure]]):
+    rssi_coverage_maps: Dict[str, FeatureCollection] = {}
+    for gw_id, avg_mesures in gateways_coverage.items():
+        if gw_id in gateways:
+            data_points: List[DataPoint] = [RSSIDataPoint(
+                latitude=m.latitude,
+                longitude=m.longitude,
+                rssi=m.max_gateway_rssi) for m in avg_mesures]
+            gw = gateways[gw_id]
+            data_points.insert(0, GatewayDataPoint(
+                latitude=gw.latitude,
+                longitude=gw.longitude,
+                id=gw.gw_id
+            ))
+            rssi_coverage_maps[gw_id] = DataPoint.get_geojson_feature_collection(data_points)
+
+    return rssi_coverage_maps
 
 
 if __name__ == "__main__":
