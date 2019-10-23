@@ -18,6 +18,16 @@ class AveragedMesure:
         return f'latitude: {self.latitude} longitude: {self.longitude} temperature: {self.temperature} humidity: {self.humidity} max_rssi: {self.max_gateway_rssi} max_snr: {self.max_gateway_snr}'
 
 
+def filter_mesures_by_sf(mesures: List['Mesure'])->Dict[str, List['Mesure']]:
+    mesures_by_sf: Dict[str, List['Mesure']] = {}
+    for m in mesures:
+        if m.data_rate in mesures_by_sf:
+            mesures_by_sf[m.data_rate].append(m)
+        else:
+            mesures_by_sf[m.data_rate] = [m]
+    return mesures_by_sf
+
+
 def get_coordinates_matrix(mesures: List['Mesure']) -> List[List[float]]:
     return [[m.latitude, m.longitude] for m in mesures]
 

@@ -5,7 +5,7 @@ from typing import List
 
 from encoder import RSSIDataPoint
 
-from processor import get_clusters, AveragedMesure
+from processor import get_clusters, AveragedMesure, filter_mesures_by_sf
 
 
 class Gateway:
@@ -108,5 +108,6 @@ if __name__ == "__main__":
         nombre_min_mesures=30,
         rayon_mesure_en_metres=15
     )
-    average_0 = AveragedMesure(mesures=clusters[0])
-    print(average_0)
+
+    sf_clusters = filter_mesures_by_sf(mesures)
+    print(sf_clusters)
