@@ -3,13 +3,13 @@ from typing import List, Dict
 
 
 class Gateway:
-    def __init__(self, id: str, latitude: float, longitude: float):
-        self.id = id
+    def __init__(self, gw_id: str, latitude: float, longitude: float):
+        self.gw_id = gw_id
         self.latitude = latitude
         self.longitude = longitude
 
     def __str__(self):
-        return f'id: {self.id} lat: {self.latitude} long: {self.longitude}'
+        return f'id: {self.gw_id} lat: {self.latitude} long: {self.longitude}'
 
     def __repr__(self):
         return self.__str__()
@@ -35,7 +35,7 @@ def get_gateways(mesures: List['Mesure']) -> Dict[str, Gateway]:
             if mesure_gw.id not in gateways:
                 if mesure_gw.latitude and mesure_gw.longitude:
                     gateways[mesure_gw.id] = Gateway(
-                        id=mesure_gw.id,
+                        gw_id=mesure_gw.id,
                         latitude=mesure_gw.latitude,
                         longitude=mesure_gw.longitude
                     )

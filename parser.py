@@ -3,9 +3,10 @@ import sys
 from json.decoder import JSONObject
 from typing import List
 
-from encoder import RSSIDataPoint
+from encoder import RSSIDataPoint, create_gateways_map
 
 from preprocessor import get_clusters
+from processor import get_gateways
 
 
 class MesureGateway:
@@ -108,3 +109,6 @@ if __name__ == "__main__":
         nombre_min_mesures=30,
         rayon_mesure_en_metres=15
     )
+
+    gateways_map = create_gateways_map(get_gateways(mesures))
+    print(gateways_map)

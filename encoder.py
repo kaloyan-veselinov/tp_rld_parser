@@ -1,6 +1,8 @@
-from typing import List
+from typing import List, Dict
 
 from geojson import Point, Feature, FeatureCollection
+
+from processor import Gateway
 
 
 class DataPoint:
@@ -32,6 +34,33 @@ class RSSIDataPoint(DataPoint):
 
     def get_pin_color(self) -> str:
         return "#FF0000"
+
+
+class GatewayDataPoint(DataPoint):
+    def __init__(self, latitude: float, longitude: float, id: str):
+        super(GatewayDataPoint, self).__init__(latitude=latitude, longitude=longitude)
+        self.id = id
+
+    def get_pin_color(self) -> str:
+        return "#FF0000"
+
+    def get_geojson_feature(self) -> Feature:
+        return Feature(
+            geometry=self.get_geojson_point(),
+            properties={
+                'name': self.id,
+                'marker-color': self.get_pin_color()
+            }
+        )
+
+
+def create_gateways_map(gateways: Dict[str, Gateway]):
+    gateway_data_points: List[GatewayDataPoint] = [GatewayDataPoint(
+        latitude=g.latitude,
+        longitude=g.longitude,
+        id=g.gw_id
+    ) for g in gateways.values()]
+    return DataPoint.get_geojson_feature_collection(gateway_data_points)
 
 
 if __name__ == "__main__":
