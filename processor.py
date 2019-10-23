@@ -1,7 +1,7 @@
 from statistics import mean, median
 from typing import List, Dict
 
-from preprocessor import filter_mesures_by_gateway
+from preprocessor import filter_mesures_by_gateway, get_clusters
 
 
 class Gateway:
@@ -49,10 +49,17 @@ def get_gateways_coverage(mesures: List['Mesure']) -> Dict[str, List[AveragedMes
     mesures_by_gw: Dict[str, List['Mesure']] = filter_mesures_by_gateway(mesures)
 
     for gw_id, m in mesures_by_gw.items():
-        average_mesure = AveragedMesure(mesures=m)
-        if gw_id in gateways_coverage:
-            gateways_coverage[gw_id].append(average_mesure)
-        else:
-            gateways_coverage[gw_id] = [average_mesure]
+        clustered_data = get_clusters(
+            mesures=m,
+            nombre_min_mesures=10,
+            rayon_mesure_en_metres=30
+        )
+        for cluster_id, cluster_mesures in clustered_data.items():
+            if cluster_id != -1:
+                average_mesure = AveragedMesure(mesures=cluster_mesures)
+                if gw_id in gateways_coverage:
+                    gateways_coverage[gw_id].append(average_mesure)
+                else:
+                    gateways_coverage[gw_id] = [average_mesure]
 
     return gateways_coverage

@@ -106,8 +106,8 @@ if __name__ == "__main__":
     # print(RSSIDataPoint.get_geojson_feature_collection(rssi_data_points))
     clusters = get_clusters(
         mesures=mesures,
-        nombre_min_mesures=30,
-        rayon_mesure_en_metres=15
+        nombre_min_mesures=10,
+        rayon_mesure_en_metres=30
     )
 
     gateways = get_gateways(mesures)
