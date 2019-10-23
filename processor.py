@@ -1,3 +1,4 @@
+from statistics import mean, median
 from typing import List, Dict
 
 from numpy.core._multiarray_umath import radians
@@ -5,14 +6,16 @@ from sklearn.cluster import DBSCAN
 
 
 class AveragedMesure:
-    def __init__(self, data_rate: str, latitude: float, longitude: float, temperature: int, humidity: int, max_gateway_rssi: float, max_gateway_snr: float):
-        self.data_rate = data_rate
-        self.latitude = latitude
-        self.longitude = longitude
-        self.temperature = temperature
-        self.humidity = humidity
-        self.max_gateway_rssi = max_gateway_rssi
-        self.max_gateway_snr = max_gateway_snr
+    def __init__(self, mesures: List['Mesure']):
+        self.latitude = mean(m.latitude for m in mesures)
+        self.longitude = mean(m.longitude for m in mesures)
+        self.temperature = median(m.temperature for m in mesures)
+        self.humidity = median(m.humidity for m in mesures)
+        self.max_gateway_rssi = mean(m.gateways[0].rssi for m in mesures)
+        self.max_gateway_snr = mean(m.gateways[0].snr for m in mesures)
+
+    def __str__(self):
+        return f'latitude: {self.latitude} longitude: {self.longitude} temperature: {self.temperature} humidity: {self.humidity} max_rssi: {self.max_gateway_rssi} max_snr: {self.max_gateway_snr}'
 
 
 def get_coordinates_matrix(mesures: List['Mesure']) -> List[List[float]]:
