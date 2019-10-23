@@ -5,7 +5,7 @@ from typing import List
 
 from encoder import RSSIDataPoint
 
-from processor import get_clusters, filter_mesures_by_sf, filter_mesures_by_gateway, get_gateways
+from preprocessor import get_clusters, filter_mesures_by_sf, filter_mesures_by_gateway, get_gateways
 
 
 class MesureGateway:
