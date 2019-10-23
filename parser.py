@@ -39,6 +39,9 @@ class Mesure:
         self.humidity = humidity
         self.gateways = gateways
 
+    # def __repr__(self):
+    #     return self.__str__()
+
     def __str__(self):
         return f'data_rate: {self.data_rate} latitude: {self.latitude} longitude: {self.longitude} temperature: {self.temperature} humidity: {self.humidity} gateways: {self.gateways}'
 
@@ -48,11 +51,6 @@ class Mesure:
     def __ne__(self, other):
         return not self.__eq__(other)
 
-    def distance(self, other: 'Mesure') -> float:
-        return distance.distance(
-            (self.longitude, self.latitude),
-            (other.longitude, other.latitude)
-        ).m
 
 
 def parse_gateway_from_json(gateway_data: JSONObject) -> Gateway:
@@ -107,4 +105,9 @@ if __name__ == "__main__":
         ))
 
     # print(RSSIDataPoint.get_geojson_feature_collection(rssi_data_points))
-    print(get_reduced_dataset(mesures))
+    db = get_reduced_dataset(
+        mesures=mesures,
+        nombre_min_mesures=30,
+        rayon_mesure_en_metres=15
+    )
+    print(db)
