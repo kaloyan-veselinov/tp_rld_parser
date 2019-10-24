@@ -24,29 +24,29 @@ Voici les couleurs utilisées pour chaque plage de valeurs de RSSI (en dBm) :
 
 ```python3
 if self.rssi > -65:
-    return "#008000"
+    return "#FF0000" #rouge
 if self.rssi > -70:
-    return "#00FF00"
+    return "#FF7500"
 if self.rssi > -75:
-    return "#00FFFF"
+    return "#FFB100"
 if self.rssi > -80:
-    return "#FFFF00"
+    return "#FFFF00" #jaune
 if self.rssi > -85:
-    return "#FFA500"
+    return "#A1FF50"
 if self.rssi > -90:
-    return "#FF00FF"
+    return "#50FFE1"
 if self.rssi > -95:
-    return "#800080"
+    return "#30A1FF" #bleu
 if self.rssi > -100:
-    return "#0000FF"
+    return "#0060FF"
 if self.rssi > -105:
-    return "#000080"
+    return "#0000FF"
 if self.rssi > -110:
-    return "#FF0000"
+    return "#5000FF" #violet
 if self.rssi > -115:
-    return "#800000"
+    return "#A100FF"
 if self.rssi > -120:
-    return "#000000"
+    return "#D100FF"
 
 return "#FFF"
 ```
