@@ -1,5 +1,8 @@
+import errno
+import os
 from typing import List, Dict
 
+import geojson
 from geojson import Point, Feature, FeatureCollection
 
 from processor import Gateway, AveragedMesure
@@ -26,11 +29,33 @@ class DataPoint:
     def get_geojson_feature_collection(data_points: List['DataPoint']) -> FeatureCollection:
         return FeatureCollection([d.get_geojson_feature() for d in data_points])
 
+    @staticmethod
+    def export(collection: FeatureCollection, filename: str):
+        if not os.path.exists(os.path.dirname(filename)):
+            try:
+                os.makedirs(os.path.dirname(filename))
+            except OSError as exc:  # Guard against race condition
+                if exc.errno != errno.EEXIST:
+                    raise
+
+        with open(filename, "w") as f:
+            geojson.dump(collection, f)
+
+
 
 class RSSIDataPoint(DataPoint):
     def __init__(self, latitude: float, longitude: float, rssi: float):
         super(RSSIDataPoint, self).__init__(latitude=latitude, longitude=longitude)
         self.rssi = rssi
+
+    def get_geojson_feature(self) -> Feature:
+        return Feature(
+            geometry=self.get_geojson_point(),
+            properties={
+                'RSSI (dBm)': str(self.rssi),
+                'marker-color': self.get_pin_color()
+            }
+        )
 
     def get_pin_color(self) -> str:
         return "#FF0000"
@@ -48,7 +73,7 @@ class GatewayDataPoint(DataPoint):
         return Feature(
             geometry=self.get_geojson_point(),
             properties={
-                'name': self.id,
+                'Gateway ID': str(self.id),
                 'marker-color': self.get_pin_color()
             }
         )
@@ -66,7 +91,7 @@ class ClusterDataPoint(DataPoint):
         return Feature(
             geometry=self.get_geojson_point(),
             properties={
-                'name': f'Point de mesure {self.cluster_id}',
+                'Cluster id': str(self.cluster_id),
                 'marker-color': self.get_pin_color()
             }
         )

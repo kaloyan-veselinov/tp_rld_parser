@@ -23,7 +23,7 @@ class AveragedMesure:
         self.longitude = median(m.longitude for m in mesures)
         self.temperature = median(m.temperature for m in mesures)
         self.humidity = median(m.humidity for m in mesures)
-        self.max_gateway_rssi = mean(m.gateways[0].rssi for m in mesures)
+        self.max_gateway_rssi = round(mean(m.gateways[0].rssi for m in mesures))
         self.max_gateway_snr = mean(m.gateways[0].snr for m in mesures)
 
     def __str__(self):

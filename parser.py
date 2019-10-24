@@ -4,7 +4,7 @@ from json.decoder import JSONObject
 from typing import List
 
 from encoder import RSSIDataPoint, create_gateways_map, create_gateways_rssi_coverage_maps, \
-    create_rssi_coverage_map_by_sf, create_cluster_map
+    create_rssi_coverage_map_by_sf, create_cluster_map, DataPoint
 
 from preprocessor import get_clusters
 from processor import get_gateways, get_gateways_coverage, get_coverage_by_sf
@@ -113,12 +113,14 @@ if __name__ == "__main__":
     print("################## Clusters ##################")
     print(clusters_map)
     print()
+    DataPoint.export(clusters_map, "maps/clusters.geojson")
 
     gateways = get_gateways(mesures)
     gateways_map = create_gateways_map(gateways)
     print("################## Gateways ##################")
     print(gateways_map)
     print()
+    DataPoint.export(gateways_map, "maps/gateways.geojson")
 
     gateways_coverage = get_gateways_coverage(mesures)
     gateways_coverage_maps = create_gateways_rssi_coverage_maps(gateways, gateways_coverage)
@@ -127,6 +129,7 @@ if __name__ == "__main__":
         print(f'id: {gw}')
         print(map)
         print()
+        DataPoint.export(map, f"maps/{gw}_coverage.geojson")
 
     coverage_by_sf = get_coverage_by_sf(mesures)
     rssi_coverage_map_by_sf = create_rssi_coverage_map_by_sf(coverage_by_sf)
@@ -135,3 +138,4 @@ if __name__ == "__main__":
         print(sf)
         print(map)
         print()
+        DataPoint.export(map, f"maps/{sf}_coverage.geojson")
