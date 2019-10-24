@@ -57,29 +57,29 @@ class RSSIDataPoint(DataPoint):
         )
 
     def get_pin_color(self) -> str:
-        if self.rssi < 65:
+        if self.rssi > -65:
             return "#008000"
-        if self.rssi < 70:
+        if self.rssi > -70:
             return "#00FF00"
-        if self.rssi < 75:
+        if self.rssi > -75:
             return "#00FFFF"
-        if self.rssi < 80:
+        if self.rssi > -80:
             return "#FFFF00"
-        if self.rssi < 85:
+        if self.rssi > -85:
             return "#FFA500"
-        if self.rssi < 90:
+        if self.rssi > -90:
             return "#FF00FF"
-        if self.rssi < 95:
+        if self.rssi > -95:
             return "#800080"
-        if self.rssi < 100:
+        if self.rssi > -100:
             return "#0000FF"
-        if self.rssi < 105:
+        if self.rssi > -105:
             return "#000080"
-        if self.rssi < 110:
+        if self.rssi > -110:
             return "#FF0000"
-        if self.rssi < 115:
+        if self.rssi > -115:
             return "#800000"
-        if self.rssi < 120:
+        if self.rssi > -120:
             return "#000000"
 
         return "#FFF"
