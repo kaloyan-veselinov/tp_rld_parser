@@ -176,10 +176,3 @@ def create_cluster_map(clusters: Dict[int, List['Mesure']])->FeatureCollection:
             ))
 
     return DataPoint.get_geojson_feature_collection(cluster_data_points)
-
-
-if __name__ == "__main__":
-    d1 = RSSIDataPoint(latitude=45.7837, longitude=4.8724, rssi=-107)
-    d2 = RSSIDataPoint(latitude=45.7859, longitude=4.8783, rssi=-113)
-    feature_collection: FeatureCollection = DataPoint.get_geojson_feature_collection([d1, d2])
-    print(feature_collection)
