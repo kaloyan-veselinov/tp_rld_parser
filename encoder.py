@@ -54,7 +54,7 @@ class GatewayDataPoint(DataPoint):
         )
 
 
-def create_gateways_map(gateways: Dict[str, Gateway]):
+def create_gateways_map(gateways: Dict[str, Gateway]) -> FeatureCollection:
     gateway_data_points: List[GatewayDataPoint] = [GatewayDataPoint(
         latitude=g.latitude,
         longitude=g.longitude,
@@ -63,7 +63,9 @@ def create_gateways_map(gateways: Dict[str, Gateway]):
     return DataPoint.get_geojson_feature_collection(gateway_data_points)
 
 
-def create_gateways_rssi_coverage_maps(gateways: Dict[str, Gateway], gateways_coverage: Dict[str, List[AveragedMesure]]):
+def create_gateways_rssi_coverage_maps(gateways: Dict[str, Gateway],
+                                       gateways_coverage: Dict[str, List[AveragedMesure]]) -> Dict[
+    str, FeatureCollection]:
     rssi_coverage_maps: Dict[str, FeatureCollection] = {}
     for gw_id, avg_mesures in gateways_coverage.items():
         if gw_id in gateways:
@@ -82,9 +84,21 @@ def create_gateways_rssi_coverage_maps(gateways: Dict[str, Gateway], gateways_co
     return rssi_coverage_maps
 
 
+def create_rssi_coverage_map_by_sf(coverage_by_sf: Dict[str, List[AveragedMesure]]) -> Dict[str, FeatureCollection]:
+    rssi_coverage_map_by_sf: Dict[str, FeatureCollection] = {}
+    for sf, avg_mesures in coverage_by_sf.items():
+        data_points: List[DataPoint] = [RSSIDataPoint(
+            latitude=m.latitude,
+            longitude=m.longitude,
+            rssi=m.max_gateway_rssi) for m in avg_mesures]
+
+        rssi_coverage_map_by_sf[sf] = DataPoint.get_geojson_feature_collection(data_points)
+
+    return rssi_coverage_map_by_sf
+
+
 if __name__ == "__main__":
     d1 = RSSIDataPoint(latitude=45.7837, longitude=4.8724, rssi=-107)
     d2 = RSSIDataPoint(latitude=45.7859, longitude=4.8783, rssi=-113)
     feature_collection: FeatureCollection = DataPoint.get_geojson_feature_collection([d1, d2])
     print(feature_collection)
-

@@ -3,10 +3,11 @@ import sys
 from json.decoder import JSONObject
 from typing import List
 
-from encoder import RSSIDataPoint, create_gateways_map, create_gateways_rssi_coverage_maps
+from encoder import RSSIDataPoint, create_gateways_map, create_gateways_rssi_coverage_maps, \
+    create_rssi_coverage_map_by_sf
 
 from preprocessor import get_clusters
-from processor import get_gateways, get_gateways_coverage
+from processor import get_gateways, get_gateways_coverage, get_coverage_by_sf
 
 
 class MesureGateway:
@@ -121,5 +122,13 @@ if __name__ == "__main__":
     print("################## Gateways coverage ##################")
     for gw, map in gateways_coverage_maps.items():
         print(f'id: {gw}')
+        print(map)
+        print()
+
+    coverage_by_sf = get_coverage_by_sf(mesures)
+    rssi_coverage_map_by_sf = create_rssi_coverage_map_by_sf(coverage_by_sf)
+    print("################## Coverage by SF ##################")
+    for sf, map in rssi_coverage_map_by_sf.items():
+        print(sf)
         print(map)
         print()
