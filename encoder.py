@@ -57,7 +57,33 @@ class RSSIDataPoint(DataPoint):
         )
 
     def get_pin_color(self) -> str:
-        return "#FF0000"
+        r = self.rssi
+        if r < 65:
+            return "#008000"
+        if r < 70:
+            return "#00FF00"
+        if r < 75:
+            return "#00FFFF"
+        if r < 80:
+            return "#FFFF00"
+        if r < 85:
+            return "#FFA500"
+        if r < 90:
+            return "#FF00FF"
+        if r < 95:
+            return "#800080"
+        if r < 100:
+            return "#0000FF"
+        if r < 105:
+            return "#000080"
+        if r < 110:
+            return "#FF0000"
+        if r < 115:
+            return "#800000"
+        if r < 120:
+            return "#000000"
+
+        return "#C0C0C0"
 
 
 class GatewayDataPoint(DataPoint):
@@ -66,7 +92,7 @@ class GatewayDataPoint(DataPoint):
         self.id = id
 
     def get_pin_color(self) -> str:
-        return "#FFF"
+        return "#808080"
 
     def get_geojson_feature(self) -> Feature:
         return Feature(
