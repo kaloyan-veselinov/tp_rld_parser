@@ -1,5 +1,7 @@
 # tp_rld_parser
 
+_AKOPYAN Evelyne, VESELINOV Kaloyan_
+
 ## Utilisation
 
 ```bash
