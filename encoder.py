@@ -7,7 +7,6 @@ from geojson import Point, Feature, FeatureCollection
 
 from processor import Gateway, AveragedMesure
 
-
 class DataPoint:
     def __init__(self, latitude: float, longitude: float):
         self.latitude = latitude
@@ -85,7 +84,8 @@ class ClusterDataPoint(DataPoint):
         self.cluster_id = cluster_id
 
     def get_pin_color(self) -> str:
-        return "#FF0000"
+        colors = ["maroon", "red", "orange", "yellow", "olive", "green", "purple", "fuschia", "lime", "teal", "aqua", "blue", "navy", "black", "gray", "silver", "white"]
+        return colors[(self.cluster_id + 1) % len(colors)]
 
     def get_geojson_feature(self) -> Feature:
         return Feature(
