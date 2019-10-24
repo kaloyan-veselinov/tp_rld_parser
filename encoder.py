@@ -54,6 +54,24 @@ class GatewayDataPoint(DataPoint):
         )
 
 
+class ClusterDataPoint(DataPoint):
+    def __init__(self, latitude: float, longitude: float, cluster_id: int):
+        super(ClusterDataPoint, self).__init__(latitude=latitude, longitude=longitude)
+        self.cluster_id = cluster_id
+
+    def get_pin_color(self) -> str:
+        return "#FF0000"
+
+    def get_geojson_feature(self) -> Feature:
+        return Feature(
+            geometry=self.get_geojson_point(),
+            properties={
+                'name': f'Point de mesure {self.cluster_id}',
+                'marker-color': self.get_pin_color()
+            }
+        )
+
+
 def create_gateways_map(gateways: Dict[str, Gateway]) -> FeatureCollection:
     gateway_data_points: List[GatewayDataPoint] = [GatewayDataPoint(
         latitude=g.latitude,
@@ -95,6 +113,19 @@ def create_rssi_coverage_map_by_sf(coverage_by_sf: Dict[str, List[AveragedMesure
         rssi_coverage_map_by_sf[sf] = DataPoint.get_geojson_feature_collection(data_points)
 
     return rssi_coverage_map_by_sf
+
+
+def create_cluster_map(clusters: Dict[int, List['Mesure']])->FeatureCollection:
+    cluster_data_points: List[ClusterDataPoint] = []
+    for cluster_id, mesures in clusters.items():
+        for m in mesures:
+            cluster_data_points.append(ClusterDataPoint(
+                latitude=m.latitude,
+                longitude=m.longitude,
+                cluster_id=cluster_id
+            ))
+
+    return DataPoint.get_geojson_feature_collection(cluster_data_points)
 
 
 if __name__ == "__main__":

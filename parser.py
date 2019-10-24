@@ -4,7 +4,7 @@ from json.decoder import JSONObject
 from typing import List
 
 from encoder import RSSIDataPoint, create_gateways_map, create_gateways_rssi_coverage_maps, \
-    create_rssi_coverage_map_by_sf
+    create_rssi_coverage_map_by_sf, create_cluster_map
 
 from preprocessor import get_clusters
 from processor import get_gateways, get_gateways_coverage, get_coverage_by_sf
@@ -104,12 +104,15 @@ if __name__ == "__main__":
             rssi=m.gateways[0].rssi
         ))
 
-    # print(RSSIDataPoint.get_geojson_feature_collection(rssi_data_points))
     clusters = get_clusters(
         mesures=mesures,
         nombre_min_mesures=10,
         rayon_mesure_en_metres=30
     )
+    clusters_map = create_cluster_map(clusters)
+    print("################## Clusters ##################")
+    print(clusters_map)
+    print()
 
     gateways = get_gateways(mesures)
     gateways_map = create_gateways_map(gateways)
