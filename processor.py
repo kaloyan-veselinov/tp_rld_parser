@@ -44,40 +44,27 @@ def get_gateways(mesures: List['Mesure']) -> Dict[str, Gateway]:
     return gateways
 
 
-def get_gateways_coverage(mesures: List['Mesure']) -> Dict[str, List[AveragedMesure]]:
+def get_gateways_coverage(clustered_data: Dict[int, List['Mesure']]) -> Dict[str, List[AveragedMesure]]:
     gateways_coverage: Dict[str, List[AveragedMesure]] = {}
-    mesures_by_gw: Dict[str, List['Mesure']] = filter_mesures_by_gateway(mesures)
 
-    for gw_id, m in mesures_by_gw.items():
-        clustered_data = get_clusters(
-            mesures=m,
-            nombre_min_mesures=10,
-            rayon_mesure_en_metres=30
-        )
-        for cluster_id, cluster_mesures in clustered_data.items():
-            if cluster_id != -1:
-                average_mesure = AveragedMesure(mesures=cluster_mesures)
-                if gw_id in gateways_coverage:
-                    gateways_coverage[gw_id].append(average_mesure)
+    for cluster_id, cluster_mesures in clustered_data.items():
+        if cluster_id != -1:
+            for gw, gw_mesures in filter_mesures_by_gateway(cluster_mesures).items():
+                average_mesure = AveragedMesure(mesures=gw_mesures)
+                if gw in gateways_coverage:
+                    gateways_coverage[gw].append(average_mesure)
                 else:
-                    gateways_coverage[gw_id] = [average_mesure]
+                    gateways_coverage[gw] = [average_mesure]
 
     return gateways_coverage
 
 
-def get_coverage_by_sf(mesures: List['Mesure']) -> Dict[str, List[AveragedMesure]]:
+def get_coverage_by_sf(clustered_data: Dict[int, List['Mesure']]) -> Dict[str, List[AveragedMesure]]:
     coverage_by_sf: Dict[str, List[AveragedMesure]] = {}
-    mesures_by_sf: Dict[str, List['Mesure']] = filter_mesures_by_sf(mesures)
-
-    for sf, m in mesures_by_sf.items():
-        clustered_data = get_clusters(
-            mesures=m,
-            nombre_min_mesures=10,
-            rayon_mesure_en_metres=30
-        )
-        for cluster_id, cluster_mesures in clustered_data.items():
-            if cluster_id != -1:
-                average_mesure = AveragedMesure(mesures=cluster_mesures)
+    for cluster_id, cluster_mesures in clustered_data.items():
+        if cluster_id != -1:
+            for sf, sf_mesures in filter_mesures_by_sf(cluster_mesures).items():
+                average_mesure = AveragedMesure(mesures=sf_mesures)
                 if sf in coverage_by_sf:
                     coverage_by_sf[sf].append(average_mesure)
                 else:
