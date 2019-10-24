@@ -1,0 +1,1 @@
+{"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "Point", "coordinates": [5.90288, 45.12564]}, "properties": {"Gateway ID": "cea-chamrousse-gateway", "marker-color": "#FFF"}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [4.8783, 45.7858]}, "properties": {"RSSI (dBm)": "-119", "marker-color": "#FF0000"}}]}
