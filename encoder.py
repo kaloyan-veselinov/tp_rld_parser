@@ -7,6 +7,7 @@ from geojson import Point, Feature, FeatureCollection
 
 from processor import Gateway, AveragedMesure
 
+
 class DataPoint:
     def __init__(self, latitude: float, longitude: float):
         self.latitude = latitude
@@ -39,7 +40,6 @@ class DataPoint:
 
         with open(filename, "w") as f:
             geojson.dump(collection, f)
-
 
 
 class RSSIDataPoint(DataPoint):
@@ -109,7 +109,8 @@ class ClusterDataPoint(DataPoint):
         self.cluster_id = cluster_id
 
     def get_pin_color(self) -> str:
-        colors = ["#800000", "#FF0000", "#FFA500", "#FFFF00", "#808000", "#008000", "#800080", "#FF00FF", "#00FF00", "#008080", "#00FFFF", "#0000FF", "#000080", "#000000", "#808080", "#C0C0C0", "#FFFFFF"]
+        colors = ["#800000", "#FF0000", "#FFA500", "#FFFF00", "#808000", "#008000", "#800080", "#FF00FF", "#00FF00",
+                  "#008080", "#00FFFF", "#0000FF", "#000080", "#000000", "#808080", "#C0C0C0", "#FFFFFF"]
         return colors[(self.cluster_id + 1) % len(colors)]
 
     def get_geojson_feature(self) -> Feature:
@@ -165,7 +166,7 @@ def create_rssi_coverage_map_by_sf(coverage_by_sf: Dict[str, List[AveragedMesure
     return rssi_coverage_map_by_sf
 
 
-def create_cluster_map(clusters: Dict[int, List['Mesure']])->FeatureCollection:
+def create_cluster_map(clusters: Dict[int, List['Mesure']]) -> FeatureCollection:
     cluster_data_points: List[ClusterDataPoint] = []
     for cluster_id, mesures in clusters.items():
         for m in mesures:

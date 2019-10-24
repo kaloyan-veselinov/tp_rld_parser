@@ -1,7 +1,7 @@
 from statistics import mean, median
 from typing import List, Dict
 
-from preprocessor import filter_mesures_by_gateway, get_clusters, filter_mesures_by_sf
+from preprocessor import filter_mesures_by_gateway, filter_mesures_by_sf
 
 
 class Gateway:

@@ -35,7 +35,7 @@ def get_coordinates_matrix(mesures: List['Mesure']) -> List[List[float]]:
 
 
 def get_cluster_assignments(rayon_mesure_en_metres: float, nombre_min_mesures: int, coordinates: List[List[float]]) -> \
-List[int]:
+        List[int]:
     kms_per_radian = 6371.0088
     epsilon = rayon_mesure_en_metres / 1000 / kms_per_radian
     min_samples = nombre_min_mesures
@@ -56,7 +56,8 @@ def group_data(mesures: List['Mesure'], cluster_assignements: List[int]) -> Dict
     return data
 
 
-def get_clusters(rayon_mesure_en_metres: float, nombre_min_mesures: int, mesures: List['Mesure']) -> Dict[int, List['Mesure']]:
+def get_clusters(rayon_mesure_en_metres: float, nombre_min_mesures: int, mesures: List['Mesure']) -> Dict[
+    int, List['Mesure']]:
     coordinates: List[List[float]] = get_coordinates_matrix(mesures)
     cluster_ids: List[int] = get_cluster_assignments(
         rayon_mesure_en_metres=rayon_mesure_en_metres,

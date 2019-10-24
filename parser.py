@@ -5,7 +5,6 @@ from typing import List
 
 from encoder import RSSIDataPoint, create_gateways_map, create_gateways_rssi_coverage_maps, \
     create_rssi_coverage_map_by_sf, create_cluster_map, DataPoint
-
 from preprocessor import get_clusters
 from processor import get_gateways, get_gateways_coverage, get_coverage_by_sf
 
@@ -50,7 +49,6 @@ class Mesure:
 
     def __ne__(self, other):
         return not self.__eq__(other)
-
 
 
 def parse_gateway_from_json(gateway_data: JSONObject) -> MesureGateway:
